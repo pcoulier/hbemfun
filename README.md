@@ -1,4 +1,4 @@
 hbemfun
 =======
 
-Hierarchical matrices; boundary element method; elastodynamics.
+Hierarchical matrices; boundary element models; elastodynamics.
