@@ -1,0 +1,31 @@
+#ifndef _BEMMAT_
+#define _BEMMAT_
+
+void bemmat(const bool& probAxi, const bool& probPeriodic, const unsigned int& probDim,
+            const unsigned int& nColDof, const bool& UmatOut, const bool& TmatOut,
+            const double* const Nod, const unsigned int& nNod,
+            const double* const Elt, const unsigned int& nElt,
+            const unsigned int* const TypeID,
+            const char* const TypeName[], const char* const TypeKeyOpts[],
+            const unsigned int* const nKeyOpt,
+            const unsigned int& nEltType, const double* const CollPoints,
+            const unsigned int& nTotalColl, 
+            const void* const* const greenPtr, const unsigned int& nGrSet,
+            const unsigned int& nugComp, const bool& ugCmplx,
+            const bool& tgCmplx, const bool& tg0Cmplx,
+            double* const URe, double* const UIm,
+            double* const TRe, double* const TIm,
+            const double* const s, const unsigned int& ms, const unsigned int& ns,
+            const double L, const double* const ky, const unsigned int nWave, 
+            const unsigned int nmax,
+			const unsigned int* const EltParent, const unsigned int* const nEltNod, const unsigned int* const nEltColl,
+			const unsigned int* const EltShapeN, const unsigned int* const EltShapeM, const unsigned int* const EltDim,
+			const unsigned int* const AxiSym, const unsigned int* const Periodic, const unsigned int* const nGauss,
+			const unsigned int* const nEltDiv, const unsigned int* const nGaussSing, const unsigned int* const nEltDivSing,
+			const unsigned int* const ncumulEltCollIndex, const unsigned int* const eltCollIndex,
+			const unsigned int* const ncumulSingularColl, const unsigned int* const nSingularColl, const int& NSingularColl, 
+			const unsigned int* const RegularColl, 
+			const unsigned int* const ncumulEltNod, const double* const EltNod,
+			const unsigned int* const RefEltType, const unsigned int* const ncumulnXi, const unsigned int* const nXi, const double* const xi, const double* const H,
+			const unsigned int* const ncumulNshape, const double* const Nshape, const double* const Mshape, const double* const dNshape);
+#endif

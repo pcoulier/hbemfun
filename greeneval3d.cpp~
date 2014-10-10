@@ -1,0 +1,329 @@
+#include "search1.h"
+#include <complex>
+#include "math.h"
+#include "fsgreen3d.h"
+#include "fsgreen3dt.h"
+#include "mex.h"
+
+#ifndef __GNUC__
+#define isnan(x) ((x) != (x))
+#endif
+
+using namespace std;
+//==============================================================================
+void greeneval3d(const void* const* const greenPtr, const unsigned int& nGrSet,
+                 const bool& ugCmplx, const bool& tgCmplx, const bool& tg0Cmplx,
+                 const double& xiR, const double& xiZ, unsigned int& r1, unsigned int& r2,
+                 unsigned int& z1, unsigned int& z2, unsigned int& zs1, double* const interpr,
+                 double* const interpz, bool& extrapFlag, const bool& UmatOut,const bool& TmatOut,
+                 const double* const Coll, const unsigned int& nColl, const unsigned int& iColl,
+                 const unsigned int& zPos, double* const UgrRe, double* const UgrIm,
+                 double* const TgrRe, double* const TgrIm, double* const Tgr0Re,
+                 double* const Tgr0Im)
+//==============================================================================
+{
+
+  const unsigned int GreenFunType=*((const unsigned int*)greenPtr[0]);
+  const bool calcTg0=Tgr0Re!=0;
+
+  if (GreenFunType==1) // USER DEFINED GREEN'S FUNCTION
+  {
+    // Resolve Green's function pointer array
+    const unsigned int nzs=*((const unsigned int*)greenPtr[1]);
+    const double* const zs =(const double* const)greenPtr[2];
+    const unsigned int nr=*((const unsigned int*)greenPtr[3]);
+    const double* const r =(const double* const)greenPtr[4];
+    const unsigned int nz=*((const unsigned int*)greenPtr[5]);
+    const double* const z =(const double* const)greenPtr[6];
+    const double* const ugRe =(const double* const)greenPtr[7];
+    const double* const ugIm =(const double* const)greenPtr[8];
+    const double* const tgRe =(const double* const)greenPtr[9];
+    const double* const tgIm =(const double* const)greenPtr[10];
+    const double* const tg0Re =(const double* const)greenPtr[11];
+    const double* const tg0Im =(const double* const)greenPtr[12];
+    const bool zRel=*((const bool*)greenPtr[13]);
+
+	
+	mexPrintf("zPos: %d \n",zPos);
+    mexPrintf("nColl: %d \n",nColl);
+    mexPrintf("iColl: %d \n",iColl);
+	// for (unsigned int i=0; i<nz ; i++)
+	// {
+		// mexPrintf("z [%d]: %e \n",i,z[i]);
+	// }
+	
+    const unsigned int rend=nr-1;
+    const unsigned int zend=nz-1;
+    const unsigned int zsend=nzs-1;
+    searchClosest(Coll[zPos*nColl+iColl],zs,zsend,zs1);
+    // Use actual source to receiver distance if zRel=false
+    //const double xiZabs=(zRel?xiZ:xiZ+zs[zs1]);
+    const double xiZabs=(zRel?xiZ:xiZ+Coll[zPos*nColl+iColl]);
+    search1(xiR,r,rend,r1,r2,interpr,extrapFlag);
+      if (extrapFlag && (r1==rend)) throw("Range of input argument 'r' insufficient.");
+    
+    mexPrintf("extrapFlag: %s \n", extrapFlag ? "true": "false");
+    mexPrintf("xiZ: %f \n",xiZ);
+    mexPrintf("xiZabs: %f \n",xiZabs);
+    mexPrintf("xiZabs: %f \n",xiZabs);
+    
+    search1(xiZabs,z,zend,z1,z2,interpz,extrapFlag);
+    mexPrintf("extrapFlag: %s \n", extrapFlag ? "true": "false");
+      if (extrapFlag) throw("Range of input argument 'z' insufficient.");
+
+    const double fac11 = interpr[0]*interpz[0];
+    const double fac12 = interpr[0]*interpz[1];
+    const double fac21 = interpr[1]*interpz[0];
+    const double fac22 = interpr[1]*interpz[1];
+
+    for (unsigned int iGrSet=0; iGrSet<nGrSet; iGrSet++)
+    {
+      // EDT2.0 ind   = 5*(ir+nr*(iz+nz*(izs+nzs*iGrSet)));
+      // EDT2.1 ind   = 5*(izs+nzs*(ir+nr*(iz+nz*iGrSet)));
+      const unsigned int ind11 = 5*(zs1+nzs*(r1+nr*(z1+nz*iGrSet)));
+      const unsigned int ind12 = 5*(zs1+nzs*(r1+nr*(z2+nz*iGrSet)));
+      const unsigned int ind21 = 5*(zs1+nzs*(r2+nr*(z1+nz*iGrSet)));
+      const unsigned int ind22 = 5*(zs1+nzs*(r2+nr*(z2+nz*iGrSet)));
+      
+      UgrRe[5*iGrSet+0]=ugRe[ind11+0]*fac11+ugRe[ind12+0]*fac12+ugRe[ind21+0]*fac21+ugRe[ind22+0]*fac22;  // ugxr
+      UgrRe[5*iGrSet+1]=ugRe[ind11+1]*fac11+ugRe[ind12+1]*fac12+ugRe[ind21+1]*fac21+ugRe[ind22+1]*fac22;  // ugxz
+      UgrRe[5*iGrSet+2]=ugRe[ind11+2]*fac11+ugRe[ind12+2]*fac12+ugRe[ind21+2]*fac21+ugRe[ind22+2]*fac22;  // ugyt
+      UgrRe[5*iGrSet+3]=ugRe[ind11+3]*fac11+ugRe[ind12+3]*fac12+ugRe[ind21+3]*fac21+ugRe[ind22+3]*fac22;  // ugzr
+      UgrRe[5*iGrSet+4]=ugRe[ind11+4]*fac11+ugRe[ind12+4]*fac12+ugRe[ind21+4]*fac21+ugRe[ind22+4]*fac22;  // ugzz    
+      if (ugCmplx)
+      {
+        UgrIm[5*iGrSet+0]=ugIm[ind11+0]*fac11+ugIm[ind12+0]*fac12+ugIm[ind21+0]*fac21+ugIm[ind22+0]*fac22; // ugxr
+        UgrIm[5*iGrSet+1]=ugIm[ind11+1]*fac11+ugIm[ind12+1]*fac12+ugIm[ind21+1]*fac21+ugIm[ind22+1]*fac22; // ugxz
+        UgrIm[5*iGrSet+2]=ugIm[ind11+2]*fac11+ugIm[ind12+2]*fac12+ugIm[ind21+2]*fac21+ugIm[ind22+2]*fac22; // ugyt
+        UgrIm[5*iGrSet+3]=ugIm[ind11+3]*fac11+ugIm[ind12+3]*fac12+ugIm[ind21+3]*fac21+ugIm[ind22+3]*fac22; // ugzr
+        UgrIm[5*iGrSet+4]=ugIm[ind11+4]*fac11+ugIm[ind12+4]*fac12+ugIm[ind21+4]*fac21+ugIm[ind22+4]*fac22; // ugzz
+      }
+    }
+
+    if (TmatOut)
+    {
+      for (unsigned int iGrSet=0; iGrSet<nGrSet; iGrSet++)
+      {
+        // EDT2.0 ind   = 10*(ir+nr*(iz+nz*(izs+nzs*iGrSet)));
+        // EDT2.1 ind   = 10*(izs+nzs*(ir+nr*(iz+nz*iGrSet)));
+        const unsigned int ind11 = 10*(zs1+nzs*(r1+nr*(z1+nz*iGrSet)));
+        const unsigned int ind12 = 10*(zs1+nzs*(r1+nr*(z2+nz*iGrSet)));
+        const unsigned int ind21 = 10*(zs1+nzs*(r2+nr*(z1+nz*iGrSet)));
+        const unsigned int ind22 = 10*(zs1+nzs*(r2+nr*(z2+nz*iGrSet)));
+
+        TgrRe[10*iGrSet+0]=tgRe[ind11+0]*fac11+tgRe[ind12+0]*fac12+tgRe[ind21+0]*fac21+tgRe[ind22+0]*fac22; // sgxrr 
+        TgrRe[10*iGrSet+1]=tgRe[ind11+1]*fac11+tgRe[ind12+1]*fac12+tgRe[ind21+1]*fac21+tgRe[ind22+1]*fac22; // sgxtt 
+        TgrRe[10*iGrSet+2]=tgRe[ind11+2]*fac11+tgRe[ind12+2]*fac12+tgRe[ind21+2]*fac21+tgRe[ind22+2]*fac22; // sgxzz 
+        TgrRe[10*iGrSet+3]=tgRe[ind11+3]*fac11+tgRe[ind12+3]*fac12+tgRe[ind21+3]*fac21+tgRe[ind22+3]*fac22; // sgxzr 
+        TgrRe[10*iGrSet+4]=tgRe[ind11+4]*fac11+tgRe[ind12+4]*fac12+tgRe[ind21+4]*fac21+tgRe[ind22+4]*fac22; // sgyrt 
+        TgrRe[10*iGrSet+5]=tgRe[ind11+5]*fac11+tgRe[ind12+5]*fac12+tgRe[ind21+5]*fac21+tgRe[ind22+5]*fac22; // sgytz 
+        TgrRe[10*iGrSet+6]=tgRe[ind11+6]*fac11+tgRe[ind12+6]*fac12+tgRe[ind21+6]*fac21+tgRe[ind22+6]*fac22; // sgzrr 
+        TgrRe[10*iGrSet+7]=tgRe[ind11+7]*fac11+tgRe[ind12+7]*fac12+tgRe[ind21+7]*fac21+tgRe[ind22+7]*fac22; // sgztt 
+        TgrRe[10*iGrSet+8]=tgRe[ind11+8]*fac11+tgRe[ind12+8]*fac12+tgRe[ind21+8]*fac21+tgRe[ind22+8]*fac22; // sgzzz 
+        TgrRe[10*iGrSet+9]=tgRe[ind11+9]*fac11+tgRe[ind12+9]*fac12+tgRe[ind21+9]*fac21+tgRe[ind22+9]*fac22; // sgzzr 
+        if (tgCmplx)
+        {
+          TgrIm[10*iGrSet+0]=tgIm[ind11+0]*fac11+tgIm[ind12+0]*fac12+tgIm[ind21+0]*fac21+tgIm[ind22+0]*fac22; // sgxrr 
+          TgrIm[10*iGrSet+1]=tgIm[ind11+1]*fac11+tgIm[ind12+1]*fac12+tgIm[ind21+1]*fac21+tgIm[ind22+1]*fac22; // sgxtt 
+          TgrIm[10*iGrSet+2]=tgIm[ind11+2]*fac11+tgIm[ind12+2]*fac12+tgIm[ind21+2]*fac21+tgIm[ind22+2]*fac22; // sgxzz 
+          TgrIm[10*iGrSet+3]=tgIm[ind11+3]*fac11+tgIm[ind12+3]*fac12+tgIm[ind21+3]*fac21+tgIm[ind22+3]*fac22; // sgxzr 
+          TgrIm[10*iGrSet+4]=tgIm[ind11+4]*fac11+tgIm[ind12+4]*fac12+tgIm[ind21+4]*fac21+tgIm[ind22+4]*fac22; // sgyrt 
+          TgrIm[10*iGrSet+5]=tgIm[ind11+5]*fac11+tgIm[ind12+5]*fac12+tgIm[ind21+5]*fac21+tgIm[ind22+5]*fac22; // sgytz 
+          TgrIm[10*iGrSet+6]=tgIm[ind11+6]*fac11+tgIm[ind12+6]*fac12+tgIm[ind21+6]*fac21+tgIm[ind22+6]*fac22; // sgzrr 
+          TgrIm[10*iGrSet+7]=tgIm[ind11+7]*fac11+tgIm[ind12+7]*fac12+tgIm[ind21+7]*fac21+tgIm[ind22+7]*fac22; // sgztt 
+          TgrIm[10*iGrSet+8]=tgIm[ind11+8]*fac11+tgIm[ind12+8]*fac12+tgIm[ind21+8]*fac21+tgIm[ind22+8]*fac22; // sgzzz 
+          TgrIm[10*iGrSet+9]=tgIm[ind11+9]*fac11+tgIm[ind12+9]*fac12+tgIm[ind21+9]*fac21+tgIm[ind22+9]*fac22; // sgzzr 
+        }
+        if (calcTg0)
+        {
+          Tgr0Re[10*iGrSet+0]=tg0Re[ind11+0]*fac11+tg0Re[ind12+0]*fac12+tg0Re[ind21+0]*fac21+tg0Re[ind22+0]*fac22; // sgxrr 
+          Tgr0Re[10*iGrSet+1]=tg0Re[ind11+1]*fac11+tg0Re[ind12+1]*fac12+tg0Re[ind21+1]*fac21+tg0Re[ind22+1]*fac22; // sgxtt 
+          Tgr0Re[10*iGrSet+2]=tg0Re[ind11+2]*fac11+tg0Re[ind12+2]*fac12+tg0Re[ind21+2]*fac21+tg0Re[ind22+2]*fac22; // sgxzz 
+          Tgr0Re[10*iGrSet+3]=tg0Re[ind11+3]*fac11+tg0Re[ind12+3]*fac12+tg0Re[ind21+3]*fac21+tg0Re[ind22+3]*fac22; // sgxzr 
+          Tgr0Re[10*iGrSet+4]=tg0Re[ind11+4]*fac11+tg0Re[ind12+4]*fac12+tg0Re[ind21+4]*fac21+tg0Re[ind22+4]*fac22; // sgyrt 
+          Tgr0Re[10*iGrSet+5]=tg0Re[ind11+5]*fac11+tg0Re[ind12+5]*fac12+tg0Re[ind21+5]*fac21+tg0Re[ind22+5]*fac22; // sgytz 
+          Tgr0Re[10*iGrSet+6]=tg0Re[ind11+6]*fac11+tg0Re[ind12+6]*fac12+tg0Re[ind21+6]*fac21+tg0Re[ind22+6]*fac22; // sgzrr 
+          Tgr0Re[10*iGrSet+7]=tg0Re[ind11+7]*fac11+tg0Re[ind12+7]*fac12+tg0Re[ind21+7]*fac21+tg0Re[ind22+7]*fac22; // sgztt 
+          Tgr0Re[10*iGrSet+8]=tg0Re[ind11+8]*fac11+tg0Re[ind12+8]*fac12+tg0Re[ind21+8]*fac21+tg0Re[ind22+8]*fac22; // sgzzz 
+          Tgr0Re[10*iGrSet+9]=tg0Re[ind11+9]*fac11+tg0Re[ind12+9]*fac12+tg0Re[ind21+9]*fac21+tg0Re[ind22+9]*fac22; // sgzzr 
+          if (tg0Cmplx)
+          {
+            Tgr0Im[10*iGrSet+0]=tg0Im[ind11+0]*fac11+tg0Im[ind12+0]*fac12+tg0Im[ind21+0]*fac21+tg0Im[ind22+0]*fac22; // sgxrr 
+            Tgr0Im[10*iGrSet+1]=tg0Im[ind11+1]*fac11+tg0Im[ind12+1]*fac12+tg0Im[ind21+1]*fac21+tg0Im[ind22+1]*fac22; // sgxtt 
+            Tgr0Im[10*iGrSet+2]=tg0Im[ind11+2]*fac11+tg0Im[ind12+2]*fac12+tg0Im[ind21+2]*fac21+tg0Im[ind22+2]*fac22; // sgxzz 
+            Tgr0Im[10*iGrSet+3]=tg0Im[ind11+3]*fac11+tg0Im[ind12+3]*fac12+tg0Im[ind21+3]*fac21+tg0Im[ind22+3]*fac22; // sgxzr 
+            Tgr0Im[10*iGrSet+4]=tg0Im[ind11+4]*fac11+tg0Im[ind12+4]*fac12+tg0Im[ind21+4]*fac21+tg0Im[ind22+4]*fac22; // sgyrt 
+            Tgr0Im[10*iGrSet+5]=tg0Im[ind11+5]*fac11+tg0Im[ind12+5]*fac12+tg0Im[ind21+5]*fac21+tg0Im[ind22+5]*fac22; // sgytz 
+            Tgr0Im[10*iGrSet+6]=tg0Im[ind11+6]*fac11+tg0Im[ind12+6]*fac12+tg0Im[ind21+6]*fac21+tg0Im[ind22+6]*fac22; // sgzrr 
+            Tgr0Im[10*iGrSet+7]=tg0Im[ind11+7]*fac11+tg0Im[ind12+7]*fac12+tg0Im[ind21+7]*fac21+tg0Im[ind22+7]*fac22; // sgztt 
+            Tgr0Im[10*iGrSet+8]=tg0Im[ind11+8]*fac11+tg0Im[ind12+8]*fac12+tg0Im[ind21+8]*fac21+tg0Im[ind22+8]*fac22; // sgzzz 
+            Tgr0Im[10*iGrSet+9]=tg0Im[ind11+9]*fac11+tg0Im[ind12+9]*fac12+tg0Im[ind21+9]*fac21+tg0Im[ind22+9]*fac22; // sgzzr 
+          }
+        }
+      }
+    }
+    
+    // CHECK FOR NAN VALUES IN Ug,Tg and Tg0
+    for (unsigned int iElt=0; iElt<5*nGrSet; iElt++) if (isnan(UgrRe[iElt])) throw("Green's function has a NaN value at the integration point.");
+    if (ugCmplx) for (unsigned int iElt=0; iElt<5*nGrSet; iElt++) if (isnan(UgrIm[iElt])) throw("Green's function has a NaN value at the integration point.");
+    if (TmatOut)
+    {
+      for (unsigned int iElt=0; iElt<10*nGrSet; iElt++) if (isnan(TgrRe[iElt])) throw("Green's function has a NaN value at the integration point.");
+      if (tgCmplx) for (unsigned int iElt=0; iElt<10*nGrSet; iElt++) if (isnan(TgrIm[iElt])) throw("Green's function has a NaN value at the integration point.");
+      if (calcTg0)
+      {
+        for (unsigned int iElt=0; iElt<10*nGrSet; iElt++) if (isnan(Tgr0Re[iElt])) throw("Green's function has a NaN value at the integration point.");
+        if (tg0Cmplx) for (unsigned int iElt=0; iElt<10*nGrSet; iElt++) if (isnan(Tgr0Im[iElt])) throw("Green's function has a NaN value at the integration point.");
+      }
+    }
+  }
+  else if (GreenFunType==3) // 3D FULL SPACE GREEN'S FUNCTION IN FREQUENCY DOMAIN
+  {
+    // RESOLVE GREEN'S FUNCTION POINTER ARRAY
+    const double Cs=*((const double*)greenPtr[1]);
+    const double Cp=*((const double*)greenPtr[2]);
+    const double Ds=*((const double*)greenPtr[3]);
+    const double Dp=*((const double*)greenPtr[4]);
+    const double rho=*((const double*)greenPtr[5]);
+    const unsigned int nFreq=*((const unsigned int*)greenPtr[6]);
+    const double* const omega=(const double* const)greenPtr[7];
+    
+
+    // EVALUATE ANALYTICAL SOLUTION
+    const unsigned int nrRec=1;
+    const unsigned int nzRec=1;
+
+    complex<double>* Ug = 0;
+	
+	if (UmatOut)
+    {
+    // complex<double>* const Ug = new(nothrow) complex<double>[5*nrRec*nzRec*nFreq];
+	Ug = new(nothrow) complex<double>[5*nrRec*nzRec*nFreq];
+    if (Ug==0) throw("Out of memory.");
+    }
+	
+	complex<double>* Sg = 0;
+    complex<double>* Sg0 = 0;
+    if (TmatOut)
+    {
+      Sg = new(nothrow) complex<double>[10*nrRec*nzRec*nFreq];
+      if (Sg==0) throw("Out of memory.");
+    }
+    if (calcTg0)
+    {
+      Sg0 = new(nothrow) complex<double>[10*nrRec*nzRec];
+      if (Sg0==0) throw("Out of memory.");
+      const double omega0=0.0;
+      const unsigned int nFreq0=1;
+      fsgreen3d(Cs,Cp,Ds,Dp,rho,&xiR,&xiZ,&omega0,nrRec,nzRec,nFreq0,Ug,Sg0,false,calcTg0);
+    }
+    // mexPrintf("UmatOut: %s \n", UmatOut ? "true": "false");
+	// fsgreen3d(Cs,Cp,Ds,Dp,rho,&xiR,&xiZ,omega,nrRec,nzRec,nFreq,Ug,Sg,true,TmatOut);
+	fsgreen3d(Cs,Cp,Ds,Dp,rho,&xiR,&xiZ,omega,nrRec,nzRec,nFreq,Ug,Sg,UmatOut,TmatOut);
+
+
+    // COPY RESULTS
+    for (unsigned int iFreq=0; iFreq<nFreq; iFreq++)
+    {
+      unsigned int iGrSet=iFreq;
+      if (UmatOut)
+      {
+	  for (unsigned int iComp=0; iComp<5; iComp++)
+      {
+        UgrRe[5*iGrSet+iComp]=real(Ug[5*iGrSet+iComp]);
+        UgrIm[5*iGrSet+iComp]=imag(Ug[5*iGrSet+iComp]);
+        
+      }
+	  }
+      if (TmatOut)
+      {
+        for (unsigned int iComp=0; iComp<10; iComp++)
+        {
+          TgrRe[10*iGrSet+iComp]=real(Sg[10*iGrSet+iComp]);
+          TgrIm[10*iGrSet+iComp]=imag(Sg[10*iGrSet+iComp]);
+          if (calcTg0)
+          {
+            Tgr0Re[10*iGrSet+iComp]=real(Sg0[iComp]);
+            if (tg0Cmplx)
+            {
+              Tgr0Im[10*iGrSet+iComp]=imag(Sg0[iComp]);
+            }
+          }
+        }
+      }
+    }
+    delete [] Ug;
+    delete [] Sg;
+    delete [] Sg0;
+  }
+  else if (GreenFunType==7) // 3D FULL SPACE GREEN'S FUNCTION IN TIME DOMAIN
+  {
+
+    // RESOLVE GREEN'S FUNCTION POINTER ARRAY
+    const double Cs=*((const double*)greenPtr[1]);
+    const double Cp=*((const double*)greenPtr[2]);
+    const double rho=*((const double*)greenPtr[3]);
+    const double delt=*((const double*)greenPtr[4]);
+    const unsigned int nTime=*((const unsigned int*)greenPtr[5]);
+    const double* const t=(const double* const)greenPtr[6];
+
+    // EVALUATE ANALYTICAL SOLUTION
+    const unsigned int nrRec=1;
+    const unsigned int nzRec=1;
+    double* const Ug = new(nothrow) double[5*nrRec*nzRec*nTime];
+    if (Ug==0) throw("Out of memory.");
+    double* Sg = 0;
+    complex<double>* Sg0 = 0;
+    
+    // Green's displacements -- CHECK IF t=0 or not !!!!
+    unsigned int fUtyp=1;
+    fsgreen3dt(Cs,Cp,rho,fUtyp,delt,&xiR,&xiZ,t,nrRec,nzRec,nTime,Ug,Sg,true,false);
+
+    if (TmatOut)
+    {
+      Sg = new(nothrow) double[10*nrRec*nzRec*nTime];
+      if (Sg==0) throw("Out of memory.");
+      unsigned int fTtyp=0;
+      fsgreen3dt(Cs,Cp,rho,fTtyp,delt,&xiR,&xiZ,t,nrRec,nzRec,nTime,Ug,Sg,false,true);
+    }
+    if (calcTg0)
+    { 
+      complex<double>* Ug0 = 0;
+      Sg0 = new(nothrow) complex<double>[10*nrRec*nzRec];
+      if (Sg0==0) throw("Out of memory.");
+      const double omega0=0.0;
+      const unsigned int nFreq0=1; 
+      const double Ds=0.0;
+      const double Dp=0.0;
+      fsgreen3d(Cs,Cp,Ds,Dp,rho,&xiR,&xiZ,&omega0,nrRec,nzRec,nFreq0,Ug0,Sg0,false,calcTg0);
+    }
+
+    // COPY RESULTS
+    for (unsigned int iTime=0; iTime<nTime; iTime++)
+    {
+      unsigned int iGrSet=iTime;
+      for (unsigned int iComp=0; iComp<5; iComp++)
+      {
+        UgrRe[5*iGrSet+iComp]=Ug[5*iGrSet+iComp];
+      }
+      if (TmatOut)
+      {
+        for (unsigned int iComp=0; iComp<10; iComp++)
+        {
+          TgrRe[10*iGrSet+iComp]=Sg[10*iGrSet+iComp];
+          if (calcTg0)
+          {
+            Tgr0Re[10*iGrSet+iComp]=real(Sg0[iComp]);
+          }
+        }
+      }
+    }
+    delete [] Ug;
+    delete [] Sg;
+    delete [] Sg0;
+  }
+  else
+  {
+    throw("Unknown Green's function type in subroutine greeneval3d.");
+  }
+}

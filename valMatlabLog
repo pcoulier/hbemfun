@@ -1,0 +1,333 @@
+==27070== Callgrind, a call-graph generating cache profiler.
+==27070== Copyright (C) 2002-2008, and GNU GPL'd, by Josef Weidendorfer et al.
+==27070== Using LibVEX rev 1884, a library for dynamic binary translation.
+==27070== Copyright (C) 2004-2008, and GNU GPL'd, by OpenWorks LLP.
+==27070== Using valgrind-3.4.1-Debian, a dynamic binary instrumentation framework.
+==27070== Copyright (C) 2000-2008, and GNU GPL'd, by Julian Seward et al.
+==27070== 
+==27070== My PID = 27070, parent PID = 7813.  Prog and args are:
+==27070==    /usr/local/MATLAB/R2010b/bin/glnxa64/MATLAB
+==27070==    -nosplash
+==27070==    -r
+==27070==    ACAsolver_SurfaceFoundation_MeshAnsys_testRegularColl
+==27070==    -nojvm
+==27070== 
+--27070-- 
+--27070-- Command line
+--27070--    /usr/local/MATLAB/R2010b/bin/glnxa64/MATLAB
+--27070--    -nosplash
+--27070--    -r
+--27070--    ACAsolver_SurfaceFoundation_MeshAnsys_testRegularColl
+--27070--    -nojvm
+--27070-- Startup, with flags:
+--27070--    --error-limit=no
+--27070--    --tool=callgrind
+--27070--    -v
+--27070--    --log-file=valMatlabLog
+--27070--    --dump-instr=yes
+--27070-- Contents of /proc/version:
+--27070--   Linux version 2.6.28-19-generic (buildd@allspice) (gcc version 4.3.3 (Ubuntu 4.3.3-5ubuntu4) ) #66-Ubuntu SMP Sat Oct 16 18:00:58 UTC 2010
+--27070-- Arch and hwcaps: AMD64, amd64-sse2
+--27070-- Page sizes: currently 4096, max supported 4096
+--27070-- Valgrind library directory: /usr/lib/valgrind
+==27070== For interactive control, run 'callgrind_control -h'.
+--27070-- Reading syms from /usr/local/MATLAB/R2010b/bin/glnxa64/MATLAB (0x400000)
+--27070--    object doesn't have a symbol table
+--27070-- Reading syms from /lib/ld-2.9.so (0x4000000)
+--27070-- Reading debug info from /lib/ld-2.9.so ..
+--27070-- .. CRC mismatch (computed d6378fa5 wanted 50148419)
+--27070--    object doesn't have a symbol table
+--27070-- Reading syms from /usr/lib/valgrind/amd64-linux/callgrind (0x38000000)
+--27070--    object doesn't have a dynamic symbol table
+--27070-- Found runtime_resolve (amd64-def): ld-2.9.so +0x148c0=0x4015350, length 110
+--27070-- Reading syms from /usr/lib/valgrind/amd64-linux/vgpreload_core.so (0x4a21000)
+--27070-- Reading syms from /usr/local/MATLAB/R2010b/bin/glnxa64/libut.so (0x4c23000)
+--27070--    object doesn't have a symbol table
+--27070-- Reading syms from /usr/local/MATLAB/R2010b/bin/glnxa64/libmwfl.so (0x4f09000)
+--27070--    object doesn't have a symbol table
+--27070-- Reading syms from /usr/local/MATLAB/R2010b/bin/glnxa64/libmx.so (0x51af000)
+--27070--    object doesn't have a symbol table
+--27070-- Reading syms from /usr/local/MATLAB/R2010b/bin/glnxa64/libmwmpath.so (0x5411000)
+--27070--    object doesn't have a symbol table
+--27070-- Reading syms from /usr/local/MATLAB/R2010b/bin/glnxa64/libmwservices.so (0x564e000)
+--27070--    object doesn't have a symbol table
+--27070-- Reading syms from /usr/local/MATLAB/R2010b/bin/glnxa64/libmwjmi.so (0x5a03000)
+--27070--    object doesn't have a symbol table
+--27070-- Reading syms from /usr/local/MATLAB/R2010b/bin/glnxa64/libmwbridge.so (0x5c5e000)
+--27070--    object doesn't have a symbol table
+--27070-- Reading syms from /usr/local/MATLAB/R2010b/bin/glnxa64/libmwmcr.so (0x5e8a000)
+--27070--    object doesn't have a symbol table
+--27070-- Reading syms from /usr/local/MATLAB/R2010b/bin/glnxa64/libmwm_dispatcher.so (0x6102000)
+--27070--    object doesn't have a symbol table
+--27070-- Reading syms from /usr/local/MATLAB/R2010b/bin/glnxa64/libmwm_interpreter.so (0x6381000)
+--27070--    object doesn't have a symbol table
+--27070-- Reading syms from /usr/local/MATLAB/R2010b/sys/os/glnxa64/libstdc++.so.6.0.10 (0x6b63000)
+--27070-- Reading syms from /lib/libm-2.9.so (0x6e69000)
+--27070-- Reading debug info from /lib/libm-2.9.so ..
+--27070-- .. CRC mismatch (computed c14b75b7 wanted 1d0b308f)
+--27070--    object doesn't have a symbol table
+--27070-- Reading syms from /usr/local/MATLAB/R2010b/sys/os/glnxa64/libgcc_s.so.1 (0x70ee000)
+--27070-- Reading syms from /lib/libpthread-2.9.so (0x7304000)
+--27070-- Reading debug info from /lib/libpthread-2.9.so ..
+--27070-- .. CRC mismatch (computed 33123765 wanted 270dd390)
+--27070-- Reading syms from /lib/libc-2.9.so (0x7520000)
+--27070-- Reading debug info from /lib/libc-2.9.so ..
+--27070-- .. CRC mismatch (computed 9c1e0a51 wanted 201898c3)
+--27070--    object doesn't have a symbol table
+--27070-- Reading syms from /lib/librt-2.9.so (0x7892000)
+--27070-- Reading debug info from /lib/librt-2.9.so ..
+--27070-- .. CRC mismatch (computed 87ca7db9 wanted 759f6b53)
+--27070--    object doesn't have a symbol table
+--27070-- Reading syms from /usr/local/MATLAB/R2010b/bin/glnxa64/libmwi18n.so (0x7a9a000)
+--27070--    object doesn't have a symbol table
+--27070-- Reading syms from /lib/libdl-2.9.so (0x7cdf000)
+--27070-- Reading debug info from /lib/libdl-2.9.so ..
+--27070-- .. CRC mismatch (computed 1c40451f wanted 61caad0a)
+--27070--    object doesn't have a symbol table
+--27070-- Reading syms from /usr/local/MATLAB/R2010b/bin/glnxa64/libboost_date_time.so.1.40.0 (0x7ee3000)
+--27070--    object doesn't have a symbol table
+--27070-- Reading syms from /usr/local/MATLAB/R2010b/bin/glnxa64/libboost_system.so.1.40.0 (0x80f6000)
+--27070--    object doesn't have a symbol table
+--27070-- Reading syms from /usr/local/MATLAB/R2010b/bin/glnxa64/libboost_thread.so.1.40.0 (0x82f9000)
+--27070--    object doesn't have a symbol table
+--27070-- Reading syms from /usr/local/MATLAB/R2010b/bin/glnxa64/libexpat.so.1.5.0 (0x850e000)
+--27070-- Reading syms from /usr/local/MATLAB/R2010b/bin/glnxa64/libicuuc.so.42.1 (0x987b000)
+--27070-- Reading syms from /usr/local/MATLAB/R2010b/bin/glnxa64/libicui18n.so.42.1 (0x9bda000)
+--27070-- Reading syms from /usr/local/MATLAB/R2010b/bin/glnxa64/libicuio.so.42.1 (0x9f7d000)
+--27070-- Reading syms from /usr/local/MATLAB/R2010b/bin/glnxa64/libtbb.so.2 (0x4048000)
+--27070-- Reading syms from /usr/local/MATLAB/R2010b/bin/glnxa64/libtbbmalloc.so.2 (0xa189000)
+--27070-- Reading syms from /lib/libcrypt-2.9.so (0xa2ae000)
+--27070-- Reading debug info from /lib/libcrypt-2.9.so ..
+--27070-- .. CRC mismatch (computed 805d0914 wanted 7acbb9a7)
+--27070--    object doesn't have a symbol table
+--27070-- Reading syms from /usr/local/MATLAB/R2010b/bin/glnxa64/libboost_filesystem.so.1.40.0 (0xa4e6000)
+--27070--    object doesn't have a symbol table
+--27070-- Reading syms from /usr/local/MATLAB/R2010b/bin/glnxa64/libboost_signals.so.1.40.0 (0xa6fa000)
+--27070--    object doesn't have a symbol table
+--27070-- Reading syms from /lib/libz.so.1.2.3.3 (0xa910000)
+--27070-- Reading debug info from /lib/libz.so.1.2.3.3 ..
+--27070-- .. CRC mismatch (computed 3be6685a wanted a840ee6d)
+--27070--    object doesn't have a symbol table
+--27070-- Reading syms from /usr/local/MATLAB/R2010b/bin/glnxa64/libmwmlutil.so (0xab28000)
+--27070--    object doesn't have a symbol table
+--27070-- Reading syms from /usr/local/MATLAB/R2010b/bin/glnxa64/libmwmathutil.so (0xae73000)
+--27070--    object doesn't have a symbol table
+--27070-- Reading syms from /usr/local/MATLAB/R2010b/bin/glnxa64/libboost_serialization.so.1.40.0 (0xb0f0000)
+--27070--    object doesn't have a symbol table
+--27070-- Reading syms from /lib/libncurses.so.5.7 (0xb361000)
+--27070-- Reading debug info from /lib/libncurses.so.5.7 ..
+--27070-- .. CRC mismatch (computed d2311a23 wanted 1b759633)
+--27070--    object doesn't have a symbol table
+--27070-- Reading syms from /usr/local/MATLAB/R2010b/bin/glnxa64/libmwiqm.so (0xb59e000)
+--27070--    object doesn't have a symbol table
+--27070-- Reading syms from /usr/local/MATLAB/R2010b/bin/glnxa64/libmex.so (0xb80b000)
+--27070--    object doesn't have a symbol table
+--27070-- Reading syms from /usr/local/MATLAB/R2010b/bin/glnxa64/libmwm_parser.so (0xba19000)
+--27070--    object doesn't have a symbol table
+--27070-- Reading syms from /usr/local/MATLAB/R2010b/bin/glnxa64/libmwudd.so (0xc2da000)
+--27070--    object doesn't have a symbol table
+--27070-- Reading syms from /usr/local/MATLAB/R2010b/bin/glnxa64/libmwmlint.so (0xc5b7000)
+--27070--    object doesn't have a symbol table
+--27070-- Reading syms from /usr/local/MATLAB/R2010b/bin/glnxa64/libmwmtok.so (0xc836000)
+--27070--    object doesn't have a symbol table
+--27070-- Reading syms from /usr/local/MATLAB/R2010b/bin/glnxa64/libmwmcos.so (0xca3e000)
+--27070--    object doesn't have a symbol table
+--27070-- Reading syms from /usr/local/MATLAB/R2010b/bin/glnxa64/libmwgui.so (0xce80000)
+--27070--    object doesn't have a symbol table
+--27070-- Reading syms from /usr/local/MATLAB/R2010b/bin/glnxa64/libmwhg.so (0xd1c2000)
+--27070--    object doesn't have a symbol table
+--27070-- Reading syms from /usr/local/MATLAB/R2010b/bin/glnxa64/libmwhgutils.so (0xdc13000)
+--27070--    object doesn't have a symbol table
+--27070-- Reading syms from /usr/local/MATLAB/R2010b/bin/glnxa64/libuij.so (0xdebf000)
+--27070--    object doesn't have a symbol table
+--27070-- Reading syms from /usr/local/MATLAB/R2010b/bin/glnxa64/libmwudd_mi.so (0xe109000)
+--27070--    object doesn't have a symbol table
+--27070-- Reading syms from /usr/local/MATLAB/R2010b/bin/glnxa64/libmwuinone.so (0xe3a8000)
+--27070--    object doesn't have a symbol table
+--27070-- Reading syms from /usr/local/MATLAB/R2010b/bin/glnxa64/libmwm_ir.so (0xe5ae000)
+--27070--    object doesn't have a symbol table
+--27070-- Reading syms from /usr/local/MATLAB/R2010b/bin/glnxa64/libmwuix.so (0xe7fb000)
+--27070--    object doesn't have a symbol table
+--27070-- Reading syms from /usr/local/MATLAB/R2010b/bin/glnxa64/libmwxmlcore.so (0xeb58000)
+--27070--    object doesn't have a symbol table
+--27070-- Reading syms from /usr/local/MATLAB/R2010b/bin/glnxa64/libboost_regex.so.1.40.0 (0xedd2000)
+--27070--    object doesn't have a symbol table
+--27070-- Reading syms from /usr/local/MATLAB/R2010b/bin/glnxa64/libxerces-c.so.27.0 (0xf0a5000)
+--27070-- Reading syms from /usr/local/MATLAB/R2010b/bin/glnxa64/libmat.so (0xf6a4000)
+--27070--    object doesn't have a symbol table
+--27070-- Reading syms from /usr/local/MATLAB/R2010b/bin/glnxa64/libmwprofiler.so (0xf8de000)
+--27070--    object doesn't have a symbol table
+--27070-- Reading syms from /usr/local/MATLAB/R2010b/bin/glnxa64/libmwmathrng.so (0xfb1e000)
+--27070--    object doesn't have a symbol table
+--27070-- Reading syms from /usr/local/MATLAB/R2010b/bin/glnxa64/libmwmlib.so (0xfd41000)
+--27070--    object doesn't have a symbol table
+--27070-- Reading syms from /usr/local/MATLAB/R2010b/bin/glnxa64/libmwm_pcodeio.so (0xff4d000)
+--27070--    object doesn't have a symbol table
+--27070-- Reading syms from /usr/local/MATLAB/R2010b/bin/glnxa64/libmwm_pcodegen.so (0x10161000)
+--27070--    object doesn't have a symbol table
+--27070-- Reading syms from /usr/local/MATLAB/R2010b/bin/glnxa64/libmwspmatrix.so (0x1037a000)
+--27070--    object doesn't have a symbol table
+--27070-- Reading syms from /usr/local/MATLAB/R2010b/bin/glnxa64/libmwir_xfmr.so (0x105c4000)
+--27070--    object doesn't have a symbol table
+--27070-- Reading syms from /usr/local/MATLAB/R2010b/bin/glnxa64/libmwhardcopy.so (0x107d2000)
+--27070--    object doesn't have a symbol table
+--27070-- Reading syms from /usr/local/MATLAB/R2010b/bin/glnxa64/libmwhgdatatypes.so (0x109fd000)
+--27070--    object doesn't have a symbol table
+--27070-- Reading syms from /usr/local/MATLAB/R2010b/bin/glnxa64/libmwlapack.so (0x10e2a000)
+--27070--    object doesn't have a symbol table
+--27070-- Reading syms from /usr/local/MATLAB/R2010b/sys/os/glnxa64/libXm.so.3.0.2 (0x110db000)
+--27070-- Reading syms from /usr/lib/libXext.so.6.4.0 (0x11587000)
+--27070-- Reading debug info from /usr/lib/libXext.so.6.4.0 ..
+--27070-- .. CRC mismatch (computed 7e3c14b6 wanted 33f17907)
+--27070--    object doesn't have a symbol table
+--27070-- Reading syms from /usr/lib/libXt.so.6.0.0 (0x11799000)
+--27070-- Reading debug info from /usr/lib/libXt.so.6.0.0 ..
+--27070-- .. CRC mismatch (computed 501af318 wanted 2235961f)
+--27070--    object doesn't have a symbol table
+--27070-- Reading syms from /usr/lib/libX11.so.6.2.0 (0x119ff000)
+--27070-- Reading debug info from /usr/lib/libX11.so.6.2.0 ..
+--27070-- .. CRC mismatch (computed fbea3428 wanted a1184427)
+--27070--    object doesn't have a symbol table
+--27070-- Reading syms from /usr/lib/libXpm.so.4.11.0 (0x11d06000)
+--27070-- Reading debug info from /usr/lib/libXpm.so.4.11.0 ..
+--27070-- .. CRC mismatch (computed 8aa8b16a wanted 29576669)
+--27070--    object doesn't have a symbol table
+--27070-- Reading syms from /usr/local/MATLAB/R2010b/bin/glnxa64/libhdf5_hl.so.6.0.2 (0x11f17000)
+--27070-- Reading syms from /usr/local/MATLAB/R2010b/bin/glnxa64/libhdf5.so.6.0.2 (0x12147000)
+--27070-- Reading syms from /usr/local/MATLAB/R2010b/bin/glnxa64/libmwbinder.so (0x127b7000)
+--27070--    object doesn't have a symbol table
+--27070-- Reading syms from /usr/lib/libXmu.so.6.2.0 (0x129c0000)
+--27070-- Reading debug info from /usr/lib/libXmu.so.6.2.0 ..
+--27070-- .. CRC mismatch (computed 37b3484d wanted 438cf388)
+--27070--    object doesn't have a symbol table
+--27070-- Reading syms from /usr/lib/libSM.so.6.0.0 (0x12bd9000)
+--27070-- Reading debug info from /usr/lib/libSM.so.6.0.0 ..
+--27070-- .. CRC mismatch (computed 77f7d0d1 wanted caace289)
+--27070--    object doesn't have a symbol table
+--27070-- Reading syms from /usr/lib/libICE.so.6.3.0 (0x12de2000)
+--27070-- Reading debug info from /usr/lib/libICE.so.6.3.0 ..
+--27070-- .. CRC mismatch (computed d9288efe wanted a63cf42f)
+--27070--    object doesn't have a symbol table
+--27070-- Reading syms from /usr/lib/libXp.so.6.2.0 (0x12ffd000)
+--27070-- Reading debug info from /usr/lib/libXp.so.6.2.0 ..
+--27070-- .. CRC mismatch (computed 2a5df1e3 wanted e261baf8)
+--27070--    object doesn't have a symbol table
+--27070-- Reading syms from /usr/lib/libXau.so.6.0.0 (0x13206000)
+--27070-- Reading debug info from /usr/lib/libXau.so.6.0.0 ..
+--27070-- .. CRC mismatch (computed c9b7eb19 wanted bc6c6dc3)
+--27070--    object doesn't have a symbol table
+--27070-- Reading syms from /usr/lib/libxcb.so.1.1.0 (0x13409000)
+--27070-- Reading debug info from /usr/lib/libxcb.so.1.1.0 ..
+--27070-- .. CRC mismatch (computed 03cb723b wanted 80071bc9)
+--27070--    object doesn't have a symbol table
+--27070-- Reading syms from /lib/libuuid.so.1.2 (0x13625000)
+--27070-- Reading debug info from /lib/libuuid.so.1.2 ..
+--27070-- .. CRC mismatch (computed 19d946ac wanted 3803b1a6)
+--27070--    object doesn't have a symbol table
+--27070-- Reading syms from /usr/lib/libXdmcp.so.6.0.0 (0x1382a000)
+--27070-- Reading debug info from /usr/lib/libXdmcp.so.6.0.0 ..
+--27070-- .. CRC mismatch (computed fb55f3e2 wanted 525d4f87)
+--27070--    object doesn't have a symbol table
+--27070-- Symbol match: found runtime_resolve: ld-2.9.so +0x15350=0x4015350
+--27070-- REDIR: 0xffffffffff600000 (???) redirected to 0x3802ccd3 (vgPlain_amd64_linux_REDIR_FOR_vgettimeofday)
+--27070-- REDIR: 0xffffffffff600400 (???) redirected to 0x3802ccdd (vgPlain_amd64_linux_REDIR_FOR_vtime)
+--27070-- Reading syms from /usr/lib/libXcursor.so.1.0.2 (0x15b1e000)
+--27070-- Reading debug info from /usr/lib/libXcursor.so.1.0.2 ..
+--27070-- .. CRC mismatch (computed 15cdd867 wanted a60dd5d5)
+--27070--    object doesn't have a symbol table
+--27070-- Reading syms from /usr/lib/libXrender.so.1.3.0 (0x15d28000)
+--27070-- Reading debug info from /usr/lib/libXrender.so.1.3.0 ..
+--27070-- .. CRC mismatch (computed 3654c05a wanted c0d673c4)
+--27070--    object doesn't have a symbol table
+--27070-- Reading syms from /usr/lib/libXfixes.so.3.1.0 (0x15f32000)
+--27070-- Reading debug info from /usr/lib/libXfixes.so.3.1.0 ..
+--27070-- .. CRC mismatch (computed 87062290 wanted c65e5c9f)
+--27070--    object doesn't have a symbol table
+--27070-- Reading syms from /usr/local/MATLAB/R2010b/bin/glnxa64/libmwmathelem.so (0x179f3000)
+--27070--    object doesn't have a symbol table
+--27070-- Reading syms from /usr/local/MATLAB/R2010b/bin/glnxa64/libmwmathxps.so (0x18226000)
+--27070--    object doesn't have a symbol table
+--27070-- Reading syms from /usr/local/MATLAB/R2010b/bin/glnxa64/libmwmathcore.so (0x1842a000)
+--27070--    object doesn't have a symbol table
+--27070-- Reading syms from /usr/local/MATLAB/R2010b/bin/glnxa64/libmwblas.so (0x186cf000)
+--27070--    object doesn't have a symbol table
+--27070-- Reading syms from /usr/local/MATLAB/R2010b/bin/glnxa64/libmwcholmod.so (0x188e3000)
+--27070-- Reading syms from /usr/local/MATLAB/R2010b/bin/glnxa64/libmwamd.so (0x18b27000)
+--27070-- Reading syms from /usr/local/MATLAB/R2010b/bin/glnxa64/libmwcolamd.so (0x18d2f000)
+--27070-- Reading syms from /usr/local/MATLAB/R2010b/bin/glnxa64/mkl.so (0x18f35000)
+--27070-- Reading syms from /usr/local/MATLAB/R2010b/sys/os/glnxa64/libiomp5.so (0x1a2ee000)
+--27070-- Reading syms from /usr/local/MATLAB/R2010b/bin/glnxa64/mklcompat.so (0x1a493000)
+--27070--    object doesn't have a symbol table
+--27070-- Reading syms from /usr/local/MATLAB/R2010b/bin/glnxa64/libmwbuiltins.so (0x1a695000)
+--27070--    object doesn't have a symbol table
+--27070-- Reading syms from /usr/local/MATLAB/R2010b/bin/glnxa64/libmwMATLAB_res.so (0x1aaf2000)
+--27070--    object doesn't have a symbol table
+--27070-- Reading syms from /usr/local/MATLAB/R2010b/bin/glnxa64/libmwhgbuiltins.so (0x1b802000)
+--27070--    object doesn't have a symbol table
+--27070-- Reading syms from /usr/local/MATLAB/R2010b/bin/glnxa64/libmwhandle_graphics.so (0x1baa0000)
+--27070--    object doesn't have a symbol table
+--27070-- Reading syms from /usr/local/MATLAB/R2010b/bin/glnxa64/libmwchart.so (0x1cc53000)
+--27070--    object doesn't have a symbol table
+--27070-- Reading syms from /usr/local/MATLAB/R2010b/bin/glnxa64/libmwmathcgeo.so (0x1cf30000)
+--27070--    object doesn't have a symbol table
+--27070-- Reading syms from /usr/local/MATLAB/R2010b/bin/glnxa64/libgmp.so.3.4.1 (0x1d24e000)
+--27070-- Reading syms from /usr/local/MATLAB/R2010b/bin/glnxa64/libmpfr.so.1.1.2 (0x1d48f000)
+==27070== 
+==27070== Process terminating with default action of signal 1 (SIGHUP)
+==27070==    at 0x730F2E9: pthread_cond_wait@@GLIBC_2.3.2 (in /lib/libpthread-2.9.so)
+==27070==    by 0x5EE1E05: mcr_run_main(boost::function2<int, int, char const* []> const&, bool, int, char const**, bool) (in /usr/local/MATLAB/R2010b/bin/glnxa64/libmwmcr.so)
+==27070==    by 0x401723: (within /usr/local/MATLAB/R2010b/bin/glnxa64/MATLAB)
+==27070==    by 0x753E5A5: (below main) (in /lib/libc-2.9.so)
+==27070== 
+--27070-- Start dumping at BB 364265674 (Prg.Term.)...
+--27070-- Dump to /home/zuhal/pieter/NewDirectory/source/callgrind.out.27070
+--27070-- Dumping done.
+--27070-- 
+--27070-- Distinct objects: 106
+--27070-- Distinct files:   214
+--27070-- Distinct fns:     103925
+--27070-- Distinct contexts:103925
+--27070-- Distinct BBs:     152716
+--27070-- Cost entries:     145389 (Chunks 2)
+--27070-- Distinct BBCCs:   182689
+--27070-- Distinct JCCs:    72914
+--27070-- Distinct skips:   41642
+--27070-- BB lookups:       152716
+--27070-- With full      debug info:  1% (1856)
+--27070-- With file/line debug info:  0% (38)
+--27070-- With fn name   debug info: 35% (53964)
+--27070-- With no        debug info: 63% (96858)
+--27070-- BBCC Clones:       29973
+--27070-- BBs Retranslated:  0
+--27070-- Distinct instrs:   728635
+--27070-- 
+--27070-- LRU Contxt Misses: 103925
+--27070-- LRU BBCC Misses:   69693
+--27070-- LRU JCC Misses:    94804
+--27070-- BBs Executed:      364265675
+--27070-- Calls:             33814519
+--27070-- CondJMP followed:  0
+--27070-- Boring JMPs:       0
+--27070-- Recursive calls:   2803477
+--27070-- Returns:           33814519
+--27070-- 
+==27070== Events    : Ir
+==27070== Collected : 1649177361
+==27070== 
+==27070== I   refs:      1,649,177,361
+--27070-- translate:            fast SP updates identified: 0 (   --%)
+--27070-- translate:   generic_known SP updates identified: 0 (   --%)
+--27070-- translate: generic_unknown SP updates identified: 0 (   --%)
+--27070--     tt/tc: 2,318,676 tt lookups requiring 26,237,360 probes
+--27070--     tt/tc: 2,318,676 fast-cache updates, 4 flushes
+--27070--  transtab: new        152,716 (3,152,441 -> 26,007,766; ratio 82:10) [0 scs]
+--27070--  transtab: dumped     0 (0 -> ??)
+--27070--  transtab: discarded  0 (0 -> ??)
+--27070-- scheduler: 364,265,674 jumps (bb entries).
+--27070-- scheduler: 3,640/2,318,879 major/minor sched events.
+--27070--    sanity: 3641 cheap, 66 expensive checks.
+--27070--    exectx: 769 lists, 1 contexts (avg 0 per list)
+--27070--    exectx: 1 searches, 0 full compares (0 per 1000)
+--27070--    exectx: 0 cmp2, 0 cmp4, 0 cmpAll
+--27070--  errormgr: 0 supplist searches, 0 comparisons during search
+--27070--  errormgr: 0 errlist searches, 0 comparisons during search
